@@ -2,6 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
 entity test_jugador is
+ --PRIMER JUGADOR DISPLAY
       Port (YR  : in std_logic;
       DIR : in std_logic;
       RST : in std_logic;
@@ -9,9 +10,18 @@ entity test_jugador is
 --      pos_YR_ten : out std_logic_vector(3 downto 0);
 --      pos_YR_uni : out std_logic_vector (3 downto 0);
       An   : out STD_LOGIC_VECTOR(7 downto 0);
-      Ka   : out STD_LOGIC_VECTOR(7 downto 0)
+      Ka   : out STD_LOGIC_VECTOR(7 downto 0);
+      
+     --SEGUNDO JUGADOR LEDS  CON EL MISMO CLK100
+      YL   : in std_logic;  
+      DIR2 : in std_logic;
+ --RST : in std_logic;
+ --     CLK : in std_logic;
+      player_YL : out STD_LOGIC_VECTOR(15 downto 0) -- -> collision_detector
      );
 end test_jugador;
+
+
 
 architecture Behavioral of test_jugador is
 
@@ -25,6 +35,14 @@ architecture Behavioral of test_jugador is
               player_YR  : out STD_LOGIC_VECTOR (3 downto 0)
            );
     end component player_move_YR;
+    
+    component player_move_YL is
+        Port (YL  : in std_logic;
+            DIR : in std_logic;
+            RST : in std_logic;
+            CLK : in std_logic;
+            player_YL : out STD_LOGIC_VECTOR(15 downto 0)); -- -> collision_detector
+    end component player_move_YL;
 
     component display_controller is
         Port(
@@ -47,7 +65,7 @@ architecture Behavioral of test_jugador is
     
 begin
     
-    jugador : player_move_YR port map(
+    jugador_YR : player_move_YR port map(
         YR  => YR,
         DIR => DIR,
         RST => RST,
@@ -55,6 +73,15 @@ begin
         pos_YR_ten => aux1, 
         pos_YR_uni => aux2,
         player_YR  => aux3
+    );
+    
+    jugador_YL : player_move_YL port map(
+        YL   => YL,
+        DIR  => DIR2,
+        RST  => RST,
+        CLK  => CLK100,
+        player_YL => player_YL 
+        
     );
     
     display : display_controller port map (

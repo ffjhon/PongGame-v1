@@ -6,7 +6,7 @@ entity player_move_YL is
           DIR : in std_logic;
           RST : in std_logic;
           CLK : in std_logic;
-          player_YL : out STD_LOGIC_VECTOR(15 downto 0)); -- -> collision_detector
+          player_YL : out STD_LOGIC_VECTOR(15 downto 0));
 end player_move_YL;
 
 architecture Behavioral of player_move_YL is
@@ -23,7 +23,7 @@ begin
       if (CLK'event and CLK = '1') then
          if (RST = '1') then
             state <= P0;
-            player_YL <= "0000";
+            player_YL <= "0000000000000000";
          else
             state <= next_state;
             player_YL <= player_YL_i;
