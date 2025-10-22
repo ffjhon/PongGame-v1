@@ -9,7 +9,7 @@ entity timer is
         clk100MHz : in  STD_LOGIC;         -- Reloj principal de la FPGA
         reset     : in  STD_LOGIC;         -- Reset asíncrono, activo en '1'
         time_up   : out STD_LOGIC;         -- Señal de fin del temporizador
-        sec_count : out INTEGER range 0 to 120  -- Segundos transcurridos (0-120)
+        sec_count : out INTEGER range 0 to 120  -- Segundos (0-120) / Solo para simulacion 
     );
 end timer;
 

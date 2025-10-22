@@ -1,19 +1,23 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 entity player_move_YL is
     Port (YL  : in std_logic;
           DIR : in std_logic;
           RST : in std_logic;
           CLK : in std_logic;
-          player_YL : out STD_LOGIC_VECTOR(15 downto 0));
+          player_YL : out STD_LOGIC_VECTOR(15 downto 0); -- To -> Display
+          player_YL_pos : out unsigned (3 downto 0) -- -> 
+    );
 end player_move_YL;
 
 architecture Behavioral of player_move_YL is
    type state_type is (P0,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15);
    signal state, next_state : state_type;
    --Declare internal signals for all outputs of the state-machine
-   signal player_YL_i : std_logic_vector(15 downto 0);   -- example output signal
+   signal player_YL_i : std_logic_vector (15 downto 0);   -- example output signal
+   signal player_YL_pos_i : unsigned (3 downto 0);   -- example output signal
    --other outputs
 begin
 
@@ -23,10 +27,10 @@ begin
       if (CLK'event and CLK = '1') then
          if (RST = '1') then
             state <= P0;
-            player_YL <= "0000000000000000";
+            player_YL <= "0000000000000000"; player_YL_pos <= "0000";
          else
             state <= next_state;
-            player_YL <= player_YL_i;
+            player_YL <= player_YL_i; player_YL_pos <= player_YL_pos_i;
          -- assign other outputs to internal signals
          end if;
       end if;
@@ -35,42 +39,23 @@ begin
    --MOORE State-Machine - Outputs based on state only
   OUTPUT_DECODE: process (state)
   begin
-    if state = P0 then
-        player_YL_i <= "0000000000000001";
-     elsif state = P1 then
-     player_YL_i <= "0000000000000010";
-     elsif state = P2 then
-     player_YL_i <= "0000000000000100";
-     elsif state = P3 then
-     player_YL_i <= "0000000000001000";
-     elsif state = P4 then
-     player_YL_i <= "0000000000010000";
-     elsif state = P5 then
-     player_YL_i <= "0000000000100000";
-     elsif state = P6 then
-     player_YL_i <= "0000000001000000";
-     elsif state = P7 then
-     player_YL_i <= "0000000010000000";
-     elsif state = P8 then
-     player_YL_i <= "0000000100000000";
-     elsif state = P9 then
-     player_YL_i <= "0000001000000000";
-     elsif state = P10 then
-     player_YL_i <= "0000010000000000";
-     elsif state = P11 then
-     player_YL_i <= "0000100000000000";
-     elsif state = P12 then
-     player_YL_i <= "0001000000000000";
-     elsif state = P13 then
-     player_YL_i <= "0010000000000000";
-     elsif state = P14 then
-     player_YL_i <= "0100000000000000";
-     elsif state = P15 then
-     player_YL_i <= "1000000000000000";
-         
-     
+    if state = P0      then player_YL_i <= "0000000000000001"; player_YL_pos_i <= "0000";
+     elsif state = P1  then player_YL_i <= "0000000000000010"; player_YL_pos_i <= "0001";
+     elsif state = P2  then player_YL_i <= "0000000000000100"; player_YL_pos_i <= "0010";
+     elsif state = P3  then player_YL_i <= "0000000000001000"; player_YL_pos_i <= "0011";
+     elsif state = P4  then player_YL_i <= "0000000000010000"; player_YL_pos_i <= "0100";
+     elsif state = P5  then player_YL_i <= "0000000000100000"; player_YL_pos_i <= "0101";
+     elsif state = P6  then player_YL_i <= "0000000001000000"; player_YL_pos_i <= "0110";
+     elsif state = P7  then player_YL_i <= "0000000010000000"; player_YL_pos_i <= "0111";
+     elsif state = P8  then player_YL_i <= "0000000100000000"; player_YL_pos_i <= "1000";
+     elsif state = P9  then player_YL_i <= "0000001000000000"; player_YL_pos_i <= "1001";
+     elsif state = P10 then player_YL_i <= "0000010000000000"; player_YL_pos_i <= "1010";
+     elsif state = P11 then player_YL_i <= "0000100000000000"; player_YL_pos_i <= "1011";
+     elsif state = P12 then player_YL_i <= "0001000000000000"; player_YL_pos_i <= "1100";
+     elsif state = P13 then player_YL_i <= "0010000000000000"; player_YL_pos_i <= "1101";
+     elsif state = P14 then player_YL_i <= "0100000000000000"; player_YL_pos_i <= "1110";
+     elsif state = P15 then player_YL_i <= "1000000000000000"; player_YL_pos_i <= "1111";
      end if;
-     
    end process;
 
    NEXT_STATE_DECODE: process (state, YL, DIR)

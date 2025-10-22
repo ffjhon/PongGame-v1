@@ -5,10 +5,11 @@ use IEEE.NUMERIC_STD.ALL;
 entity ball_movement is
     Port (
         clk  : in STD_LOGIC;
-        clock100MHz : in STD_LOGIC;
+        --clock100MHz : in STD_LOGIC; -- Reloj mal instanciado correccion mas adelante
         reset: in STD_LOGIC;
         game_paused: in STD_LOGIC;
         game_start : in STD_LOGIC;
+        game_over : in STD_LOGIC;
         collision_left  : in STD_LOGIC;
         collision_right : in STD_LOGIC;
         collision_top   : in STD_LOGIC;
@@ -65,7 +66,7 @@ architecture Behavioral of ball_movement is
 begin
     ball_clock: SlowClock -- Instanciar el slowClock para la bola
         port map(
-        fastClock => clock100MHz,
+        fastClock => clk,
         slowClock => ball_clock_slow ,
         prescaler => 833333  -- Para 60 Hz
     );
@@ -73,20 +74,6 @@ begin
     ball_x <= ball_x_int;
     ball_y <= ball_y_int;
     ball_moving <= '1' when ball_state = MOVING else '0';
-
-    -- Divisor de frecuencia
---    process(clk)
---    begin
---        if rising_edge(clk) then
---            if movement_counter = MOVEMENT_DELAY then
---                movement_tick <= '1';
---                movement_counter <= 0;
---            else
---                movement_tick <= '0';
---                movement_counter <= movement_counter + 1;
---            end if;
---        end if;
---    end process;
 
     -- Generador de números pseudoaleatorios
     process(clk)

@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 entity player_move_YR is
     Port (YR  : in std_logic;
@@ -8,15 +9,16 @@ entity player_move_YR is
           CLK : in std_logic;
           pos_YR_ten : out std_logic_vector(3 downto 0);
           pos_YR_uni : out std_logic_vector (3 downto 0);
-          player_YR : out STD_LOGIC_VECTOR(3 downto 0)
-           );
+          player_YR  : out unsigned (3 downto 0) --player_YR  : out STD_LOGIC_VECTOR(3 downto 0)
+    );
 end player_move_YR;
 
 architecture Behavioral of player_move_YR is
    type state_type is (P0,P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15);
    signal state, next_state : state_type;
    --Declare internal signals for all outputs of the state-machine
-   signal player_YR_i : std_logic_vector(3 downto 0);  -- example output signal
+   --signal player_YR_i : std_logic_vector(3 downto 0);  -- example output signal
+   signal player_YR_i : unsigned (3 downto 0);  -- example output signal
    --other outputs
    
    component SlowClock is
